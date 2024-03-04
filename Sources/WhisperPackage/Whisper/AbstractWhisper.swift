@@ -15,8 +15,6 @@ protocol AbstractWhisperProtocol {
 public class AbstractWhisper: AbstractWhisperProtocol {
     static let shared = AbstractWhisper()
     let SrtWrappe = SrtWrapper()
-
-    private init() {}
     
     private var translatedTexts: [String] = []
     
