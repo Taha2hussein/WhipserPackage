@@ -6,7 +6,7 @@
 //
 
 import Foundation
-class SrtWrapper {
+public class SrtWrapper {
     
     // Function to save translated texts to an .srt file
     func saveTranslatedTextsToSRT(translatedTexts: [String], outputFileName: String) {

@@ -12,7 +12,7 @@ protocol AbstractWhisperProtocol {
     func translateExample(text: String,t0: String , t1: String)
 }
 
-class AbstractWhisper: AbstractWhisperProtocol {
+public class AbstractWhisper: AbstractWhisperProtocol {
     static let shared = AbstractWhisper()
     let SrtWrappe = SrtWrapper()
 
