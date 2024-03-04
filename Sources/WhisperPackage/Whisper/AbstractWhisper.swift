@@ -7,7 +7,7 @@
 import Foundation
 import whisper_cpp
 
-protocol AbstractWhisperProtocol {
+public protocol AbstractWhisperProtocol {
     func readWav(modelPath: String, wavPath: String)
     func translateExample(text: String,t0: String , t1: String)
 }
@@ -61,7 +61,7 @@ public class AbstractWhisper: AbstractWhisperProtocol {
         return 0
     }
     //finish_callback(0);
-    func readWav(modelPath: String, wavPath: String)  {
+    public func readWav(modelPath: String, wavPath: String)  {
         // Create C function pointers
         let progressCallback: ProgressCallback = { progress in
             return AbstractWhisper.shared.progressCallbackWrapper(progress: progress)
@@ -79,7 +79,7 @@ public class AbstractWhisper: AbstractWhisperProtocol {
     }
     
     // Function to translate text
-    func translateExample(text: String,t0: String , t1: String) {
+    public func translateExample(text: String,t0: String , t1: String) {
         let fullText = "[\(t0) --> \(t1)]  \(text)"
         SwiftyTranslate.translate(text: fullText, from: "en", to: "ar") { result in
             self.handleTranslationResult(result: result)

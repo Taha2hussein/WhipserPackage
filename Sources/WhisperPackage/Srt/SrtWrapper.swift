@@ -9,7 +9,7 @@ import Foundation
 public class SrtWrapper {
     
     // Function to save translated texts to an .srt file
-    func saveTranslatedTextsToSRT(translatedTexts: [String], outputFileName: String) {
+    public func saveTranslatedTextsToSRT(translatedTexts: [String], outputFileName: String) {
         var srtString = ""
         
         for (index, translatedText) in translatedTexts.enumerated() {
@@ -34,7 +34,7 @@ public class SrtWrapper {
         }
     }
     
-    func chackPath(outputFileName: String){
+    public  func chackPath(outputFileName: String){
         if let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             let fileURL = documentDirectory.appendingPathComponent(outputFileName)
             
