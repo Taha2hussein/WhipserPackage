@@ -74,16 +74,15 @@ public class AbstractWhisper: AbstractWhisperProtocol {
         let finishCallback: FinishCallback = { progress  in
             return AbstractWhisper.shared.finishCallbackWrapper(progress: progress)
         }
-        
         _ = read_wav(modelPath, wavPath, progressCallback, resultCallback, finishCallback)
     }
     
     // Function to translate text
     public func translateExample(text: String,t0: String , t1: String) {
         let fullText = "[\(t0) --> \(t1)]  \(text)"
-        SwiftyTranslate.translate(text: fullText, from: "en", to: "ar") { result in
-            self.handleTranslationResult(result: result)
-        }
+        
+       let translated =  SwiftyTranslate.translate(text: "[\(t0) --> \(t1)]  \(text)", from: "en", to: "ar")
+            self.handleTranslationResult(result: translated)
     }
     
     func handleTranslationResult(result: Result<SwiftyTranslate.Translation, SwiftyTranslate.Error>) {
@@ -95,5 +94,4 @@ public class AbstractWhisper: AbstractWhisperProtocol {
             print("Translation failed with error: \(error)")
         }
     }
-    
 }
