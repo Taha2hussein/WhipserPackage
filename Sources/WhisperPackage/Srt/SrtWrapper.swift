@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 public class SrtWrapper {
     
     // Function to save translated texts to an .srt file
@@ -34,37 +35,37 @@ public class SrtWrapper {
         }
     }
     
-    public  func chackPath(outputFileName: String){
+    public func checkPath(outputFileName: String) -> Result<[String], Error> {
         if let documentDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             let fileURL = documentDirectory.appendingPathComponent(outputFileName)
-            
+            var subtitles = [String]()
             // Check if the file exists
             if FileManager.default.fileExists(atPath: fileURL.path) {
                 do {
                     let srtString = try String(contentsOf: fileURL, encoding: .utf8)
                     print("Contents of SRT file:")
                     let subtitleComponents = srtString.components(separatedBy: "\n\n")
-                    
-                    var subtitles = [String]()
-                    
+
                     // Iterate through subtitle components and parse each one
                     for component in subtitleComponents {
                         let lines = component.components(separatedBy: .newlines)
                         if lines.count > 0 {
-                            let text = lines[0..<lines.count].joined(separator: "\n")
-                            //                                let subtitle = SrtModel( startTime: startTime, endTime: endTime, text: text)
-                            print(text)
+                            let text = lines.joined(separator: "\n")
                             subtitles.append(text)
                         }
                     }
+                    return .success(subtitles)
                 } catch {
                     print("Error reading SRT file: \(error)")
+                    return .failure(error)
                 }
             } else {
-                print("File not found at path: \(fileURL.path)")
+                let error = NSError(domain: "FileNotFoundError", code: 404, userInfo: [NSLocalizedDescriptionKey: "File not found at path: \(fileURL.path)"])
+                return .failure(error)
             }
         } else {
-            print("Document directory not found.")
+            let error = NSError(domain: "DirectoryNotFoundError", code: 404, userInfo: [NSLocalizedDescriptionKey: "Document directory not found."])
+            return .failure(error)
         }
     }
 }
