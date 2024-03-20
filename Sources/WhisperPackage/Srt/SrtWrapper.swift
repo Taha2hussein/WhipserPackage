@@ -6,9 +6,13 @@
 //
 
 import Foundation
+public protocol SrtWrapperProtocol {
+    func saveTranslatedTextsToSRT(translatedTexts: [String], outputFileName: String)
+    func checkPath(outputFileName: String) -> Result<[String], Error>
+}
+public class SrtWrapper: SrtWrapperProtocol {
+    public static let shared = SrtWrapper()
 
-public class SrtWrapper {
-    
     // Function to save translated texts to an .srt file
     public func saveTranslatedTextsToSRT(translatedTexts: [String], outputFileName: String) {
         var srtString = ""

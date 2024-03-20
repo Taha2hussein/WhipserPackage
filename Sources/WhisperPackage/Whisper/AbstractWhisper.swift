@@ -14,9 +14,13 @@ public protocol AbstractWhisperProtocol {
 
 public class AbstractWhisper: AbstractWhisperProtocol {
     public static let shared = AbstractWhisper()
-    let SrtWrappe = SrtWrapper()
+    let SrtWrappe: SrtWrapperProtocol
     
     private var translatedTexts: [String] = []
+    
+    init(srtWrapper: SrtWrapperProtocol = SrtWrapper()) {
+        self.SrtWrappe = srtWrapper
+    }
     
     // Define C function pointer types
     typealias FinishCallback = @convention(c) (Int32) -> Int32
