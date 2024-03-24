@@ -85,7 +85,7 @@ public class AbstractWhisper: AbstractWhisperProtocol {
     public func translateExample(text: String,t0: String , t1: String) {
         let toConverted = t0.convertTimeStringToSRTFormat()
         let t1Converted = t1.convertTimeStringToSRTFormat()
-        let fullText = "[\(toConverted) --> \(t1Converted)]  \(text)"
+        let fullText = "[\(toConverted ?? "") --> \(t1Converted ?? "")]  \(text)"
         
        let translated =  SwiftyTranslate.translate(text: fullText, from: "en", to: "ar")
             self.handleTranslationResult(result: translated)
