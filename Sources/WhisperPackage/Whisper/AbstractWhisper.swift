@@ -85,9 +85,10 @@ public class AbstractWhisper: AbstractWhisperProtocol {
     public func translateExample(text: String,t0: String , t1: String) {
         let toConverted = t0.convertTimeStringToSRTFormat()
         let t1Converted = t1.convertTimeStringToSRTFormat()
-        let fullText = "[\(toConverted ?? "") --> \(t1Converted ?? "")]  \(text)"
-        
-       let translated =  SwiftyTranslate.translate(text: fullText, from: "en", to: "ar")
+//        let fullText = "[\(toConverted ?? "") --> \(t1Converted ?? "")]  \(text)"
+        let srtEntry = text.formatAsSRTEntry(startTime: toConverted ?? "", endTime: t1Converted ?? "")
+
+       let translated =  SwiftyTranslate.translate(text: srtEntry, from: "en", to: "ar")
             self.handleTranslationResult(result: translated)
     }
     
@@ -104,23 +105,32 @@ public class AbstractWhisper: AbstractWhisperProtocol {
 
 extension String {
     func convertTimeStringToSRTFormat() -> String? {
-        let components = self.components(separatedBy: ":")
-        guard components.count >= 2 else {
-            return nil // Invalid time string format
+           let components = self.components(separatedBy: ":")
+           guard components.count >= 2 else {
+               return nil // Invalid time string format
+           }
+           
+           // Extract seconds and milliseconds
+           let secondsAndMilliseconds = components[1].components(separatedBy: ".")
+           guard secondsAndMilliseconds.count == 2 else {
+               return nil // Invalid time string format
+           }
+           
+           guard let minutes = Int(components[0]),
+                 let seconds = Int(secondsAndMilliseconds[0]),
+                 let milliseconds = Int(secondsAndMilliseconds[1]) else {
+               return nil // Invalid time string components
+           }
+           
+           return String(format: "%02d:%02d:%02d,%03d", 0, minutes, seconds, milliseconds)
+       }
+    
+    func formatAsSRTEntry( startTime: String, endTime: String) -> String {
+            guard let startTimeFormatted = startTime.convertTimeStringToSRTFormat(),
+                  let endTimeFormatted = endTime.convertTimeStringToSRTFormat() else {
+                return ""
+            }
+            
+            return "[\(startTimeFormatted) --> \(endTimeFormatted)]\n\(self)\n"
         }
-        
-        // Extract seconds and milliseconds
-        let secondsAndMilliseconds = components[1].components(separatedBy: ".")
-        guard secondsAndMilliseconds.count == 2 else {
-            return nil // Invalid time string format
-        }
-        
-        guard let minutes = Int(components[0]),
-              let seconds = Int(secondsAndMilliseconds[0]),
-              let milliseconds = Int(secondsAndMilliseconds[1]) else {
-            return nil // Invalid time string components
-        }
-        
-        return String(format: "%02d:%02d:%02d,%03d", 0, minutes, seconds, milliseconds)
-    }
 }
